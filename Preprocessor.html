@@ -1,0 +1,345 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "authorship_tag": "ABX9TyPig5mLjgkwgzDP5jvrTT+d",
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    },
+    "language_info": {
+      "name": "python"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/Rishmithabandari/2137_AIML_LABS/blob/main/Preprocessor.html\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import re\n",
+        "import spacy\n",
+        "from collections import Counter\n"
+      ],
+      "metadata": {
+        "id": "n6cw6EBm6_bt"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Replace this with the content you extracted from your PDF\n",
+        "text = \"\"\"https://ssrn.com/abstract=1601785\"\"\"\n"
+      ],
+      "metadata": {
+        "id": "1jQIcWLr7A9k"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import re\n",
+        "from collections import Counter\n",
+        "\n",
+        "def impurity(text):\n",
+        "    return Counter(re.findall(r'[^a-zA-Z\\s]', text))  # Count non-alphabetic characters\n",
+        "\n",
+        "# Example: Assuming 'text' contains content from the PDF\n",
+        "text = \"Behavioral scientists routinely publish broad claims about human psychology and behavior in the world’s top journals based on samples drawn entirely from Western, Educated, Industrialized, Rich and Democratic (WEIRD) societies. Researchers - often implicitly - assume that either there is little variation across human populations, or that these “standard subjects” are as representative of the species as any other population. Are these assumptions justified? Here, our review of the comparative database from across the behavioral sciences suggests both that there is substantial variability in experimental results across populations and that WEIRD subjects are particularly unusual compared with the rest of the species - frequent outliers. The domains reviewed include visual perception, fairness, cooperation, spatial reasoning, categorization and inferential induction, moral reasoning, reasoning styles, self-concepts and related motivations, and the heritability of IQ. The findings suggest that members of WEIRD societies, including young children, are among the least representative populations one could find for generalizing about humans. Many of these findings involve domains that are associated with fundamental aspects of psychology, motivation, and behavior - hence, there are no obvious a priori grounds for claiming that a particular behavioral phenomenon is universal based on sampling from a single subpopulation. Overall, these empirical patterns suggests that we need to be less cavalier in addressing questions of human nature on the basis of data drawn from this particularly thin, and rather unusual, slice of humanity. We close by proposing ways to structurally re‐organize the behavioral sciences to best tackle these challenges.\"\n",
+        "print(\"Impurities found:\", impurity(text))\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "gmOZgw1B7DVS",
+        "outputId": "4958a941-dff2-4aa8-dddc-514404d387da"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Impurities found: Counter({',': 21, '.': 8, '-': 5, '’': 1, '(': 1, ')': 1, '“': 1, '”': 1, '?': 1, '‐': 1})\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "def clean_text(text):\n",
+        "    text = re.sub(r'[^a-zA-Z\\s]', '', text)  # Remove special characters and numbers\n",
+        "    text = re.sub(r'\\s+', ' ', text)  # Remove extra whitespace\n",
+        "    return text.strip()\n",
+        "\n",
+        "# Clean the text\n",
+        "cleaned_text = clean_text(text)\n",
+        "print(\"Cleaned text:\", cleaned_text)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "HrQ3k9Rz7F7_",
+        "outputId": "c02404d7-9e35-46a2-c2f8-1d25841ff257"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Cleaned text: Behavioral scientists routinely publish broad claims about human psychology and behavior in the worlds top journals based on samples drawn entirely from Western Educated Industrialized Rich and Democratic WEIRD societies Researchers often implicitly assume that either there is little variation across human populations or that these standard subjects are as representative of the species as any other population Are these assumptions justified Here our review of the comparative database from across the behavioral sciences suggests both that there is substantial variability in experimental results across populations and that WEIRD subjects are particularly unusual compared with the rest of the species frequent outliers The domains reviewed include visual perception fairness cooperation spatial reasoning categorization and inferential induction moral reasoning reasoning styles selfconcepts and related motivations and the heritability of IQ The findings suggest that members of WEIRD societies including young children are among the least representative populations one could find for generalizing about humans Many of these findings involve domains that are associated with fundamental aspects of psychology motivation and behavior hence there are no obvious a priori grounds for claiming that a particular behavioral phenomenon is universal based on sampling from a single subpopulation Overall these empirical patterns suggests that we need to be less cavalier in addressing questions of human nature on the basis of data drawn from this particularly thin and rather unusual slice of humanity We close by proposing ways to structurally reorganize the behavioral sciences to best tackle these challenges\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "!pip install pyspellchecker"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "Uu-cj8gt7IqP",
+        "outputId": "bd114178-83be-4c2e-8a58-3741adc000b3"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Requirement already satisfied: pyspellchecker in /usr/local/lib/python3.10/dist-packages (0.8.1)\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "import spacy\n",
+        "\n",
+        "# Load the Spacy model\n",
+        "nlp = spacy.load(\"en_core_web_sm\")\n",
+        "\n",
+        "# Normalize function\n",
+        "def normalize_text(text):\n",
+        "    doc = nlp(text)\n",
+        "    return [token.lemma_.lower() for token in doc if token.is_alpha and not token.is_stop]\n",
+        "\n",
+        "# Apply normalization\n",
+        "normalized_tokens = normalize_text(cleaned_text)\n",
+        "print(\"Normalized tokens:\", normalized_tokens)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 0
+        },
+        "id": "Sejj0ynE7e-I",
+        "outputId": "39cfdc69-adab-440e-9dfa-49f40ec984bf"
+      },
+      "execution_count": 36,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Normalized tokens: ['run', 'store', 'need', 'buy', 'apple']\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from spellchecker import SpellChecker\n",
+        "\n",
+        "spell = SpellChecker()\n",
+        "misspelled = spell.unknown(normalized_tokens)\n",
+        "print(\"Spelling errors:\", misspelled)\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "jDg9AduO7Pih",
+        "outputId": "56472ddf-a278-435c-e9ea-93bff0b67bee"
+      },
+      "execution_count": null,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "Spelling errors: {'iq', 'priori', 'selfconcept'}\n"
+          ]
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "from collections import Counter\n",
+        "from itertools import chain\n",
+        "\n",
+        "# Example list of lists (normalized_tokens could be your list of tokenized sentences)\n",
+        "list_of_lists = [normalized_tokens]  # Replace with your actual list\n",
+        "\n",
+        "# Create a frequency table\n",
+        "frequency_table = Counter(chain.from_iterable(list_of_lists))\n",
+        "\n",
+        "# Print each line of the frequency table separately\n",
+        "print(\"\\nFrequency Table:\")\n",
+        "for word, count in frequency_table.items():\n",
+        "    print(f\"{word}: {count}\")\n"
+      ],
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 0
+        },
+        "id": "k2b1FMnT85xg",
+        "outputId": "b91ebcf0-ca82-42db-a96e-55e2a3464503"
+      },
+      "execution_count": 34,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "name": "stdout",
+          "text": [
+            "\n",
+            "Frequency Table:\n",
+            "behavioral: 4\n",
+            "scientist: 1\n",
+            "routinely: 1\n",
+            "publish: 1\n",
+            "broad: 1\n",
+            "claim: 2\n",
+            "human: 4\n",
+            "psychology: 2\n",
+            "behavior: 2\n",
+            "world: 1\n",
+            "journal: 1\n",
+            "base: 2\n",
+            "sample: 2\n",
+            "draw: 2\n",
+            "entirely: 1\n",
+            "western: 1\n",
+            "educated: 1\n",
+            "industrialized: 1\n",
+            "rich: 1\n",
+            "democratic: 1\n",
+            "weird: 3\n",
+            "society: 2\n",
+            "researcher: 1\n",
+            "implicitly: 1\n",
+            "assume: 1\n",
+            "little: 1\n",
+            "variation: 1\n",
+            "population: 4\n",
+            "standard: 1\n",
+            "subject: 2\n",
+            "representative: 2\n",
+            "specie: 2\n",
+            "assumption: 1\n",
+            "justify: 1\n",
+            "review: 2\n",
+            "comparative: 1\n",
+            "database: 1\n",
+            "science: 2\n",
+            "suggest: 3\n",
+            "substantial: 1\n",
+            "variability: 1\n",
+            "experimental: 1\n",
+            "result: 1\n",
+            "particularly: 2\n",
+            "unusual: 2\n",
+            "compare: 1\n",
+            "rest: 1\n",
+            "frequent: 1\n",
+            "outlier: 1\n",
+            "domain: 2\n",
+            "include: 2\n",
+            "visual: 1\n",
+            "perception: 1\n",
+            "fairness: 1\n",
+            "cooperation: 1\n",
+            "spatial: 1\n",
+            "reasoning: 3\n",
+            "categorization: 1\n",
+            "inferential: 1\n",
+            "induction: 1\n",
+            "moral: 1\n",
+            "style: 1\n",
+            "selfconcept: 1\n",
+            "related: 1\n",
+            "motivation: 2\n",
+            "heritability: 1\n",
+            "iq: 1\n",
+            "finding: 2\n",
+            "member: 1\n",
+            "young: 1\n",
+            "child: 1\n",
+            "find: 1\n",
+            "generalize: 1\n",
+            "involve: 1\n",
+            "associate: 1\n",
+            "fundamental: 1\n",
+            "aspect: 1\n",
+            "obvious: 1\n",
+            "priori: 1\n",
+            "ground: 1\n",
+            "particular: 1\n",
+            "phenomenon: 1\n",
+            "universal: 1\n",
+            "single: 1\n",
+            "subpopulation: 1\n",
+            "overall: 1\n",
+            "empirical: 1\n",
+            "pattern: 1\n",
+            "need: 1\n",
+            "cavalier: 1\n",
+            "address: 1\n",
+            "question: 1\n",
+            "nature: 1\n",
+            "basis: 1\n",
+            "datum: 1\n",
+            "thin: 1\n",
+            "slice: 1\n",
+            "humanity: 1\n",
+            "close: 1\n",
+            "propose: 1\n",
+            "way: 1\n",
+            "structurally: 1\n",
+            "reorganize: 1\n",
+            "well: 1\n",
+            "tackle: 1\n",
+            "challenge: 1\n"
+          ]
+        }
+      ]
+    }
+  ]
+}
